@@ -1,11 +1,3 @@
-/**
- *	@filename:BaseDao.java
- *  @basepath:com.zxt.khzy.dao.impl 
- *  @description:TODO
- *  @author:fangxiaohua
- *  @created:2013-9-11下午8:16:13
- *  @version:V1.0
- */
 
 package com.doudou.project.weixin.dao;
 
@@ -17,12 +9,12 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 /**
- * @author guoweixin
- * @Description 与数据库交互的基础类
- * @created 2013-9-11 下午8:16:13
- * @History 
- * @version v1.0
- */
+ * @Author 窦刘柱
+ * @Description //TODO 
+ * @Date 20:52 2019/11/20 
+ * @Param 
+ * @return 
+ **/
 
 public class BaseDao {
 	private static Connection connection;

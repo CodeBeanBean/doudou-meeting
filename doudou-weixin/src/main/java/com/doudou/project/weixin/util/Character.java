@@ -14,7 +14,7 @@ public class Character {
 	 * 
 	 * @return 半角 String
 	 * 
-	 * @author Gyb
+	 * @author 窦刘柱
 	 * 
 	 */
 
