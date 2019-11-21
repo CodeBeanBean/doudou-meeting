@@ -1,6 +1,5 @@
 package com.doudou.project.weixin.service;
 
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,32 +7,25 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.doudou.project.weixin.api.hitokoto.HitokotoUtil;
+import com.doudou.project.weixin.api.tuling.TulingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.doudou.project.weixin.main.MenuManager;
-import com.doudou.project.weixin.pojo.AccessToken;
 import com.doudou.project.weixin.util.MessageUtil;
-import com.doudou.project.weixin.util.WeixinUtil;
-
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.core.util.QuickWriter;
-import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.io.xml.PrettyPrintWriter;
-import com.thoughtworks.xstream.io.xml.XppDriver;
-
-import net.sf.json.JSONObject;
 
 
 import com.doudou.project.weixin.bean.resp.Article;
-import com.doudou.project.weixin.bean.resp.MusicMessage;
 import com.doudou.project.weixin.bean.resp.NewsMessage;
 import com.doudou.project.weixin.bean.resp.TextMessage;
 
 @Service
 public class CoreService {
 
-
+	@Autowired
+	private TulingUtil tulingUtil; //图灵api
+	@Autowired
+	private HitokotoUtil hitokotoUtil; //一言api
 	/**
 	 * 处理微信发来的请求
 	 * 
@@ -60,7 +52,7 @@ public class CoreService {
 			TextMessage textMessage = new TextMessage();
 			textMessage.setToUserName(fromUserName);
 			textMessage.setFromUserName(toUserName);
-			textMessage.setCreateTime(new Date().getTime());
+			textMessage.setCreateTime(System.currentTimeMillis());
 			textMessage.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_TEXT);
 			textMessage.setFuncFlag(0);
 			// 由于href属性值必须用双引号引起，这与字符串本身的双引号冲突，所以要转义
@@ -79,13 +71,14 @@ public class CoreService {
 			NewsMessage newsMessage = new NewsMessage();
 			newsMessage.setToUserName(fromUserName);
 			newsMessage.setFromUserName(toUserName);
-			newsMessage.setCreateTime(new Date().getTime());
+			newsMessage.setCreateTime(System.currentTimeMillis());
 			newsMessage.setMsgType(MessageUtil.RESP_MESSAGE_TYPE_NEWS);
 			newsMessage.setFuncFlag(0);
 
 			// 文本消息
 			if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
-				respContent = "您发送的是文本消息！";
+				respContent = tulingUtil.sendMessage(content);
+				//respContent = "您发送的是文本消息！";
 			}
 			// 图片消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {
@@ -122,10 +115,14 @@ public class CoreService {
 					String eventKey = requestMap.get("EventKey");
 
 					if (eventKey.equals("11")) {
-						respContent = "菜单项被点击！";
+						respContent = "会议抢单项被点击！";
 
-					}
-					else if (eventKey.equals("70")) {
+					}else if (eventKey.equals("31")){
+						respContent = "联系我们项被点击！";
+					}else if (eventKey.equals("34")){
+						//respContent = "随机一言项被点击！";
+						respContent = hitokotoUtil.sendMessage();
+					} else if (eventKey.equals("70")) {
 
 						List<Article> articleList = new ArrayList<Article>();
 						

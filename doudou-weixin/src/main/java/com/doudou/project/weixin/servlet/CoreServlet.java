@@ -58,6 +58,11 @@ public class CoreServlet {
 	 * 那么如何解析请求消息的问题也就转化为如何从request中得到微信服务器发送给我们的xml格式的消息了。
 	 * 这里我们借助于开源框架dom4j去解析xml（这里使用的是dom4j-1.6.1.jar），然后将解析得到的结果存入HashMap，解析请求消息的方法如下：
 	 */
+
+
+
+
+
 	@Autowired
 	CoreService coreService;
 	@RequestMapping(value="weixin",method=RequestMethod.POST)

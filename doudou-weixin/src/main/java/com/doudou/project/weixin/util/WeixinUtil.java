@@ -46,7 +46,8 @@ public class WeixinUtil {
 			// 从上述SSLContext对象中得到SSLSocketFactory对象
 			SSLSocketFactory ssf = sslContext.getSocketFactory();
 
-			URL url = new URL(requestUrl);
+			//URL url = new URL(requestUrl);
+			URL url= new URL(null, requestUrl, new sun.net.www.protocol.https.Handler());
 			HttpsURLConnection httpUrlConn = (HttpsURLConnection) url.openConnection();
 			httpUrlConn.setSSLSocketFactory(ssf);
 
