@@ -25,8 +25,26 @@ public class TulingUtil {
      * @OutputParam result 响应的文本
      */
     public String sendMessage(String msg){
+
+
+        String[] str = { "f94f1aa826bf48c7ad10e822c52c1ff3",
+                        "59612aa131604596ba64b222bada9e99",
+                        "27f773a776374a1f92c0c53fd6e5c5e2",
+                        "0877647621004661be403d20219d5367",
+                        "a130797080e3431d88be88e49a1f2991"};
+        int i = 0;
+
+   /*   f94f1aa826bf48c7ad10e822c52c1ff3
+        59612aa131604596ba64b222bada9e99
+        27f773a776374a1f92c0c53fd6e5c5e2
+        0877647621004661be403d20219d5367
+        a130797080e3431d88be88e49a1f2991*/
+
         //生成入参的JSON对象
-        JSONObject jsonObject= sendJSONObject(msg,"f94f1aa826bf48c7ad10e822c52c1ff3");
+        while(true){
+
+        JSONObject jsonObject= sendJSONObject(msg,str[i]);
+
         //2步  对指定的API 地址 发送POST请求 （传入入参JSON对象）
         JSONObject object= WeixinUtil.httpRequest(TULING_API_URL,"POST",jsonObject.toString());
 
@@ -35,8 +53,20 @@ public class TulingUtil {
 
         JSONObject object1= (JSONObject) array.get(0);
         JSONObject object2= (JSONObject) object1.get("values");
+
         String result= (String) object2.get("text");
+
+        if (result.equals("请求次数超限制!")){
+            i++;
+
+            if (i==5){
+                return result;
+            }
+            continue;
+        }
+
         return result;
+        }
     }
     /** ###########TODO 生成入参JSON对象
      * 按规则生成入参的JSON对象
