@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import com.doudou.project.weixin.api.hitokoto.HitokotoUtil;
+import com.doudou.project.weixin.api.ownthink.OwnThinkBean;
+import com.doudou.project.weixin.api.ownthink.OwnThinkUtil;
 import com.doudou.project.weixin.api.tuling.TulingUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class CoreService {
 	private TulingUtil tulingUtil; //图灵api
 	@Autowired
 	private HitokotoUtil hitokotoUtil; //一言api
+
+	@Autowired
+	private OwnThinkUtil ownThinkUtil;
 	/**
 	 * 处理微信发来的请求
 	 * 
@@ -77,7 +82,8 @@ public class CoreService {
 
 			// 文本消息
 			if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_TEXT)) {
-				respContent = tulingUtil.sendMessage(content);
+				//respContent = tulingUtil.sendMessage(content);
+				respContent = ownThinkUtil.sendMessage(content,toUserName);
 				//respContent = "您发送的是文本消息！";
 			}
 			// 图片消息
