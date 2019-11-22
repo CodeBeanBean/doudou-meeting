@@ -64,9 +64,8 @@ public class OwnThinkUtil {
 
         OwnThinkBean ownThinkBean = new OwnThinkBean();
         ownThinkBean.setSpoken(spoken);
-
-        ownThinkBean.setUser("");
-
+        ownThinkBean.setUser(userid);
+        ownThinkBean.setAppid("941f8ac4084a253c8fa718ea504dae15");
         JSONObject jsonObject=JSONObject.fromObject(ownThinkBean);
         return jsonObject;
     }
