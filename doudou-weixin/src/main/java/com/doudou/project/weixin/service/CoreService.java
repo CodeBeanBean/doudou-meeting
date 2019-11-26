@@ -7,10 +7,12 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.doudou.project.weixin.api.accesstoken.AccessTokenRedis;
 import com.doudou.project.weixin.api.hitokoto.HitokotoUtil;
 import com.doudou.project.weixin.api.ownthink.OwnThinkBean;
 import com.doudou.project.weixin.api.ownthink.OwnThinkUtil;
 import com.doudou.project.weixin.api.tuling.TulingUtil;
+import com.doudou.project.weixin.pojo.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +25,18 @@ import com.doudou.project.weixin.bean.resp.TextMessage;
 
 @Service
 public class CoreService {
+	//图灵api
 
 	@Autowired
-	private TulingUtil tulingUtil; //图灵api
-	@Autowired
-	private HitokotoUtil hitokotoUtil; //一言api
+	private TulingUtil tulingUtil;
 
+	//一言api
+
+	@Autowired
+	private HitokotoUtil hitokotoUtil;
+
+    @Autowired
+	private AccessTokenRedis accessTokenRedis;
 	@Autowired
 	private OwnThinkUtil ownThinkUtil;
 	/**
@@ -85,6 +93,7 @@ public class CoreService {
 				//respContent = tulingUtil.sendMessage(content);
 				respContent = ownThinkUtil.sendMessage(content,toUserName);
 				//respContent = "您发送的是文本消息！";
+				System.out.println("accesstoken值是"+accessTokenRedis.getAccessTokenVal());
 			}
 			// 图片消息
 			else if (msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_IMAGE)) {

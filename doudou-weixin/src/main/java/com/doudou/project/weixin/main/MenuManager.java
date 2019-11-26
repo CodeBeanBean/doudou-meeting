@@ -24,8 +24,10 @@ public class MenuManager {
 	3、根据access_token，将json格式的菜单数据通过https post方式提交。
 
  */
-	
-	public final static String REAL_URL="http://weixinguo.xicp.net/maven_weixin/"; //个人花生壳
+
+	public final static String REAL_URL="http://ingrgp.natappfree.cc/"; //个人花生壳
+
+	//public final static String REAL_URL="http://weixinguo.xicp.net/maven_weixin/"; //个人花生壳
 	//public final static String REAL_URL = "http://wxmobsa.yidatec.com/weixin/"; //正式号服务器	
 	
 	public final static String appId="wx1158482d9175ec59";
