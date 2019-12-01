@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title></title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
+    <link href="https://cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.theme.css" rel="stylesheet">
+
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+    <script type="text/javascript">
+
+        $(function(){
+            //加载课题类别数据
+            loadMeetingType();
+            loadGrabList("-1");//加载全部课题
+        })
+        /**
+         * 类别改变  */
+        function showAllGrabs(tname){
+            loadGrabList(tname);//加载全部课题
+        }
+        /**
+         * 可抢单列表
+         * */
+        function loadGrabList(tname){
+            var uid=$("#uid").val();
+
+            $("#grabNum").empty();
+            $("#grabDiv").empty();
+            $.ajax({
+                type:"post",
+                url:"[[@{/meetingPub/grabList}]]", // meetingPub/grabList
+                data:{"uid":uid,"tname":tname},
+                success:function(msg){
+
+                    var mname="";
+                    var remark="";
+                    var dateCurr="";
+                    var appendHtml = "";
+
+                    $("#grabNum").append(msg.length);
+                    for(var i=0;i<msg.length;i++){
+                        var pid=msg[i].id;
+                        mname=msg[i].ptitle;
+                        remark=msg[i].pcode;
+                        dateCurr=msg[i].remark;
+
+                        appendHtml += "<div style='width: 100%;background-color: white;margin-top: -3px;padding:10px 10px 10px 15px;display: inline-block;'>" +
+                            "<div style='width: 70%;float: left;' onclick='showMeetingInfo(\"" + 1 + "\");'>" +
+                            "<div style='white-space: nowrap;overflow: hidden;text-overflow:ellipsis;display: block;font-size:18px;'>" +
+                            mname + "</div>" +
+                            "<div style='white-space: nowrap;overflow: hidden;text-overflow:ellipsis;display: block;color: #777777;font-size:16px;padding-top:1px'>" +
+                            remark + " / " + dateCurr + "</div></div>" +
+                            "<div style='width: 30%;float: right;'>" +
+                            "<button class='able-btn' onclick='meetingGrabAdd(\""+pid+"\")' >可抢单</button></div></div>";
+                    }
+                    $("#grabDiv").append(appendHtml);
+                }
+            });
+
+
+        }
+        /**
+         进入可抢单 添加页面
+         * */
+        function meetingGrabAdd(pid){
+            $("#pid").val(pid);
+            // window.location.href="[[@{/meetingGrab/addPage}]]"; // meetingGrab/addPage
+            //form表单
+            document.formMeetingGrabAdd.submit();
+        }
+        /**
+         * 加载时 ajax 将课题类别数据加载
+         */
+        function loadMeetingType(){
+            $.ajax({
+                type:"post",
+                url:"[[@{/meetingType/list}]]",  //  meetingType/list
+                success:function(msg){
+                    // <option value="JAVA">JAVA</option>
+                    var appendHtml="<option value='-1'>可抢单</option>";
+                    for(var i=0;i<msg.length;i++){
+                        appendHtml+="<option value='"+msg[i].tname+"'>"+msg[i].tname+"</option>";
+                    }
+                    $("#selectStatus").append(appendHtml);
+                }
+            });
+        }
+
+
+
+        function showPubDiv() {
+            $("#two_line").css("border-top", "5px solid #4E90C7");
+            //$("#two_tab").css("color","#777777");
+            $("#one_line").css("border-top", "5px solid white");
+            //$("#one_tab").css("color","white");
+            $("#two").css("display", "none");
+            $("#one").css("display", "block");
+        }
+
+        function showMyMeetings() {
+
+            $("#two_line").css("border-top", "5px solid white");
+            $("#one_line").css("border-top", "5px solid #4E90C7");
+
+            $("#one").css("display", "none");
+            $("#two").css("display", "block");
+
+            $("#two").empty();
+
+
+            var mname="学习SpringBoot";
+            var remark="备注";
+            var dateCurr="时间";
+            var uid=$("#uid").val();
+            $.ajax({
+                type:"post",
+                url:"[[@{/meetingGrab/uid}]]",  // meetingGrab/uid
+                data:{"uid":uid},
+                success:function(msg){
+
+                    var appendHtml = "<font style='padding: 10px 10px 10px 15px;display: block;color: #777777;'>您共发布了"+msg.length+"场会议</font>";
+
+                    for(var i=0;i<msg.length;i++){
+                        mname=msg[i].ptitle;
+                        remark=msg[i].pcode;
+                        dateCurr=msg[i].tname;
+                        var  grabStatus=msg[i].meetingGrab.grabstatus;
+                        appendHtml += "<div style='width: 100%;background-color: white;margin-top: -3px;padding:10px 10px 10px 15px;display: inline-block;'>" +
+                            "<div style='width: 70%;float: left;' onclick='showMeetingInfo(\"" + 1 + "\");'>" +
+                            "<div style='white-space: nowrap;overflow: hidden;text-overflow:ellipsis;display: block;font-size:18px;'>" +
+                            mname + "</div>" +
+                            "<div style='white-space: nowrap;overflow: hidden;text-overflow:ellipsis;display: block;color: #777777;font-size:16px;padding-top:1px'>" +
+                            remark + " / " + dateCurr + "</div></div>" +
+                            "<div style='width: 30%;float: right;'>" ;
+                        if(grabStatus==0){
+                            appendHtml+="未审批";
+                        }else if(grabStatus==1) {
+                            appendHtml+="<button class='able-btn' >抢单成功</button>";
+                        }else{
+                            appendHtml+="抢单失败";
+                        }
+                        appendHtml+="</div></div>";
+                    }
+
+                    $("#two").append(appendHtml);
+                }
+            });
+
+
+
+
+
+        }
+    </script>
+</head>
+
+<body>
+<div data-role="page" id="pageDetail">
+    <div style="padding:0px;background-color: #4E90C7;width: 100%;height:40px;line-height:40px;font-size:18px;text-align: center;cursor: pointer;" data-role="none">
+        <div style="width: 50%;float: left;color: white;" onclick="showPubDiv();" id="one_tab">
+            抢单
+            <div style="border-right: 1px solid white;float: right;margin-top: 10px;height: 20px;"></div>
+        </div>
+        <div style="width: 50%;float: left;color: white;" onclick="showMyMeetings();" id="two_tab">我的抢单</div>
+        <div style="border-top:5px solid white;width: 50%;float: left;" id="one_line"></div>
+        <div style="border-top:5px solid #4E90C7;width: 50%;float: left;" id="two_line"></div>
+    </div>
+    <div id="one" class="ui-body-d ui-content" style="padding:0;display: block;width: 100%;">
+        <div style="padding:0 0 0 15px;display: block;width: 55%;float: left;line-height: 60px;color: #777777;">
+            可参与<font id="grabNum"></font>场会议的抢单
+
+        </div>
+        <div style="width: calc(45% - 15px);float: right;">
+            <select id="selectStatus"  onchange="showAllGrabs(this.value)">
+
+            </select>
+        </div>
+
+        <div id="grabDiv" style="width: 100%;float: left;">
+
+        </div>
+    </div>
+
+    <form name="formMeetingGrabAdd" action="meetingGrab/addPage"  th:action="@{/meetingGrab/addPage}" method="get">
+        <input type="hidden" th:value="${uid}" name="uid" id="uid"></input>
+        <input type="hidden" name="pid" id="pid" value=""></input>
+    </form>
+
+
+
+    <div id="two" class="ui-body-d ui-content" style="padding: 0;display: none;width: 100%;">
+
+    </div>
+</body>
+
+</html>

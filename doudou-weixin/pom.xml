@@ -2,14 +2,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <parent>
 
+    <parent>
         <groupId>com.doudou</groupId>
         <artifactId>doudou</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.doudou</groupId>
+
     <artifactId>doudou-weixin</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>doudou-weixin</name>
@@ -20,6 +20,18 @@
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.doudou</groupId>
+            <artifactId>doudou-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.doudou</groupId>
+            <artifactId>doudou-pojo</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
         <!--thymeleaf模版引擎 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -88,6 +100,11 @@
             </exclusions>
         </dependency>
 
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
+        </dependency>
 
 
         <!-- weixin需要 -->
@@ -133,6 +150,8 @@
             <artifactId>commons-codec</artifactId>
             <version>1.10</version>
         </dependency>
+
+
         <!-- 微信需要结束 -->
     </dependencies>
 

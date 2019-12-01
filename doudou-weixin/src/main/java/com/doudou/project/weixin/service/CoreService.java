@@ -7,12 +7,18 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.doudou.po.User;
+import com.doudou.po.WeiUser;
 import com.doudou.project.weixin.api.accesstoken.AccessTokenRedis;
 import com.doudou.project.weixin.api.hitokoto.HitokotoUtil;
 import com.doudou.project.weixin.api.ownthink.OwnThinkBean;
 import com.doudou.project.weixin.api.ownthink.OwnThinkUtil;
 import com.doudou.project.weixin.api.tuling.TulingUtil;
+import com.doudou.project.weixin.api.userinfo.UserInfoService;
+import com.doudou.project.weixin.main.MenuManager;
 import com.doudou.project.weixin.pojo.AccessToken;
+import com.doudou.service.UserService;
+import com.doudou.service.WeiUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +39,18 @@ public class CoreService {
 	//一言api
 
 	@Autowired
-	private HitokotoUtil hitokotoUtil;
+	private HitokotoUtil hitokotoUtil; //一言
 
     @Autowired
-	private AccessTokenRedis accessTokenRedis;
+	private AccessTokenRedis accessTokenRedis; //redis accseetoken 对象
 	@Autowired
-	private OwnThinkUtil ownThinkUtil;
+	private OwnThinkUtil ownThinkUtil; //思知机器人
+	@Autowired
+	private UserInfoService userInfoService; //收集个人信息
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private WeiUserService weiUserService;
 	/**
 	 * 处理微信发来的请求
 	 * 
@@ -117,7 +129,15 @@ public class CoreService {
 				String eventType = requestMap.get("Event");
 				// 订阅
 				if (eventType.equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
-					
+					/**
+					 * 手机用户的个人信息
+					 * 1得到用户的openid
+					 * 2根据openid向微信服务器发送get请求得到用户信息
+					 * 3得到用户是jsonobject对象-》转成weiuser对象
+					 * 4将weiuser对象进行数据库的添加操作
+					 */
+
+					userInfoService.userInfo(fromUserName);
 					respContent = "欢迎关注微信公众号";
 				}
 				// 取消订阅
@@ -130,7 +150,42 @@ public class CoreService {
 					String eventKey = requestMap.get("EventKey");
 
 					if (eventKey.equals("11")) {
-						respContent = "会议抢单项被点击！";
+
+						List<Article> articleList = new ArrayList<Article>();
+						Article article = new Article();
+						//	respContent = "会议抢单项被点击！";
+						//通过openid (fromUserName)判断当前用户是否进行绑定功能
+					User user = userService.selectBtOpenid(fromUserName);
+					if(user == null){//如果没有进行登录功能-》跳登陆页面
+					WeiUser weiUser = weiUserService.selectByOpenid(fromUserName);
+						article.setTitle("您还未登录");
+						article.setDescription("该功能需要登陆后才可访问，点击进入登陆页面");
+						article.setPicUrl(
+								"http://image.baidu.com/search/detail?ct=503316480&z=undefined&tn=baiduimagedetail&ipn=d&word=%E5%9B%BE%E7%89%87&step_word=&ie=utf-8&in=&cl=2&lm=-1&st=undefined&hd=undefined&latest=undefined&copyright=undefined&cs=1653962122,497205422&os=3275311409,3410173034&simid=3141220,535664108&pn=68&rn=1&di=221540&ln=1706&fr=&fmq=1575027941098_R&fm=&ic=undefined&s=undefined&se=&sme=&tab=0&width=undefined&height=undefined&face=undefined&is=0,0&istype=0&ist=&jit=&bdtype=0&spn=0&pi=0&gsm=0&objurl=http%3A%2F%2Fimage2.sina.com.cn%2Fent%2Fd%2F2005-06-21%2FU105P28T3D758553F326DT20050621155942.jpg&rpstart=0&rpnum=0&adpicid=0&force=undefined");
+						article.setUrl(MenuManager.REAL_URL+"user/to/login?wid="+weiUser.getId());
+
+					}else {//已经绑定 判断角色是否是发单组/抢单组
+						if(user.getRid()==1){//发单组 无权限
+							article.setTitle(user.getName()+"您是发单组,无法操作该功能");
+							article.setDescription("该功能需要抢单组权限才可访问，点击进入登陆页面");
+							article.setPicUrl("http://photocdn.sohu.com/20100902/Img274653008.jpg");
+							article.setUrl(MenuManager.REAL_URL+"user/to/unauth");
+
+						}else {//抢单组 进入抢单页面
+							article.setTitle(user.getName()+"欢迎您,进入抢单功能");
+							article.setDescription("抢单功能是什么，点击进入抢单教程");
+							article.setPicUrl("http://photocdn.sohu.com/20100902/Img274653008.jpg");
+							article.setUrl(MenuManager.REAL_URL+"user/to/meetingGrab?uid="+user.getId());
+						}
+						articleList.add(article);
+						// 设置图文消息个数
+						newsMessage.setArticleCount(articleList.size());
+						// 设置图文消息
+						newsMessage.setArticles(articleList);
+						// 将图文消息对象转换为XML字符串
+						respMessage = MessageUtil.newsMessageToXml(newsMessage);
+						return respMessage;
+					}
 
 					}else if (eventKey.equals("31")){
 						respContent = "联系我们项被点击！";
@@ -145,9 +200,8 @@ public class CoreService {
 						Article article = new Article();
 						article.setTitle("标题");
 						article.setDescription("描述内容");
-						article.setPicUrl(
-								"图片");
-						article.setUrl("跳转连接");
+						article.setPicUrl("图片链接");
+						article.setUrl("跳转链接");
 
 						
 						articleList.add(article);						

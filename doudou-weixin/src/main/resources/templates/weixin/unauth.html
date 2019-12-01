@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style type="text/css">
+        body {
+            line-height: 1.6;
+            font-family: "Helvetica Neue",Helvetica,"Microsoft YaHei",Arial,Tahoma,sans-serif;
+        }
+        .page_msg {
+            padding-left: 23px;
+            padding-right: 23px;
+            font-size: 16px;
+            text-align: center;
+        }
+        .page_msg .inner {
+            padding-top: 40px;
+            padding-bottom: 40px;
+        }
+        .page_msg .msg_icon_wrp {
+            display: block;
+            padding-bottom: 22px;
+        }
+        .icon80_smile {
+            width: 80px;
+            height: 80px;
+            display: inline-block;
+            vertical-align: middle;
+            background: transparent url(images/error.png) no-repeat 0 0;
+        }
+        i{
+            font-style: italic;
+        }
+    </style>
+    <title>无权限访问</title>
+</head>
+<body>
+<div class="page_msg">
+    <div class="inner">
+        <span class="msg_icon_wrp"><i class="icon80_smile"></i></span>
+        <div class="msg_content"><h4>您无权限访问访问此网页</h4></div>
+    </div>
+</div>
+<div style="position:fixed;width:100%;margin:0 auto;bottom:0px;text-align:center">
+    &copy;  版权所有
+</div>
+
+
+
+</body>
+</html>

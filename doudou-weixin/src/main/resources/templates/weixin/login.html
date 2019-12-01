@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>个人绑定页面</title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css">
+    <link href="https://cdn.bootcss.com/jquery-mobile/1.4.5/jquery.mobile.theme.css" rel="stylesheet">
+    <script src="http://code.jquery.com/jquery-1.8.3.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-validate/1.16.0/jquery.validate.js"></script>
+    <script src="https://cdn.bootcss.com/jquery.form/4.2.1/jquery.form.js"></script>
+    <script src="js/jquerymobile_popup.js" th:src="@{/js/jquerymobile_popup.js}"></script>
+    <script type="text/javascript">
+        function login(){
+            var wid=$("#wid").val();
+            var email=$("#email").val();
+            if (email.length<1){
+                alert("邮箱不能为空");
+                return;
+            }
+            $.ajax({
+                url:"[[@{/user/login}]]",
+                type:"post",
+                data:{"email":email,"wid":wid},
+                success:function (msg) {
+                    if (msg==1){
+                        openPopup('该邮箱已被其他用户绑定，如有疑问请联系管理员','提示',undefined,true,undefined,'error','cn');
+                        //alert("该邮箱已被其他用户绑定，如有疑问请联系管理员")
+                    }else if(msg==2){
+                        //openPopup('登陆成功','提示',undefined,true,undefined,'error','cn');
+                        //alert("登陆成功")
+                        WeixinJSBridge.call('closeWindow');
+                    }else{
+                        openPopup('邮箱不存在','提示',undefined,true,undefined,'error','cn');
+                        //alert("邮箱不存在")
+                    }
+                }
+            })
+            //	openPopup('信息提示','提示',undefined,true,undefined,'error','cn');
+            //	WeixinJSBridge.call('closeWindow');
+        }
+    </script>
+    <style type="text/css">
+        .ui-page{
+            background:#eee;
+        }
+    </style>
+</head>
+<body>
+<div data-role="page" id="pageMain" style="background-color: #4E90C7;">
+    <div style="text-align:center;"><img th:src="@{/images/dada_logo1.png}" src="images/dada_logo1.png" style="width: 100%;"></div>
+    <input type="hidden" name="wid" th:value="${wid}" value="" id="wid">
+    <div data-role="content" class="content">
+        <form id="login_params" method="post" >
+            <div>
+                <input type="text" id="email" name="email" placeholder="公司邮箱" style="background: url('/images/ic_mail.png') no-repeat 5px;background-size: 30px;padding-left:40px;">
+
+            </div>
+            <div align="center" style="padding-top:30px;">
+                <input id="pubBtn" type="button" value="登录"  onclick="login();" style="padding:10px;background: #E57330;text-shadow: none;opacity:100;color:white;font-size:20px;text-indent:0px;font-family:微软雅黑;border: none;-webkit-appearance:none;-moz-appearance:none;width: 100%;border-radius:7px;" >
+            </div>
+        </form>
+
+    </div>
+</div>
+
+
+</body>
+</html>

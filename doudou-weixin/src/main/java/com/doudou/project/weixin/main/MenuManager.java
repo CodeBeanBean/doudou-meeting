@@ -25,7 +25,7 @@ public class MenuManager {
 
  */
 
-	public final static String REAL_URL="http://ingrgp.natappfree.cc/"; //个人花生壳
+	public final static String REAL_URL="http://qugvqj.natappfree.cc/"; //个人花生壳
 
 	//public final static String REAL_URL="http://weixinguo.xicp.net/maven_weixin/"; //个人花生壳
 	//public final static String REAL_URL = "http://wxmobsa.yidatec.com/weixin/"; //正式号服务器	
@@ -80,7 +80,7 @@ public class MenuManager {
 		ViewButton btn10 = new ViewButton();
 		btn10.setName("会议发布");
 		btn10.setType("view");
-		btn10.setUrl("https://www.baidu.com/");
+		btn10.setUrl(MenuManager.REAL_URL+"oauth/weixin/meetingPub");
 
 		CommonButton btn11 = new CommonButton();
 		btn11.setName("会议抢单");
@@ -118,7 +118,7 @@ public class MenuManager {
 		ViewButton btn33 = new ViewButton();
 		btn33.setName("个人中心");
 		btn33.setType("view");
-		btn33.setUrl("https://www.sina.com.cn/");
+		btn33.setUrl(MenuManager.REAL_URL+"oauth/weixin/user");
 
 		CommonButton btn34 = new CommonButton();
 		btn34.setName("随机一言");

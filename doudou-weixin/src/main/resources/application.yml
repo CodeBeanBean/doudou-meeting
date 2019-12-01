@@ -8,7 +8,7 @@ spring:
     name: test
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
-      url: jdbc:mysql://localhost:3306/dlz?serverTimezone=GMT%2B8
+      url: jdbc:mysql://localhost:3306/nj-1903-pro?serverTimezone=GMT%2B8&characterEncoding=utf8
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
       password: 123456

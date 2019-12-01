@@ -25,7 +25,7 @@ public class MeetingPub implements Serializable {
     private String remark;
     /** 发单时间*/
     private Date createdate;
-        /**发单状态*/
+        /**发单状态 0无效1有效*/
     private Short status;
 
 

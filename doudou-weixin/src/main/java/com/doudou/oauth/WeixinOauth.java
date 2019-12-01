@@ -20,7 +20,7 @@ import java.net.URLEncoder;
  * @Time:19:40
  */
 @RequestMapping("oauth")
-@Controller
+@Controller("weixinOauth1")
 public class WeixinOauth {
     @RequestMapping("weixin")
     public void oauth(HttpServletResponse response) throws IOException {
