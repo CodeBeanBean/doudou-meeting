@@ -162,4 +162,27 @@
         </if>
         order by pub.pcode desc
     </select>
+
+
+  <!--我的抢单列表信息 根据用户id-->
+  <select id="selectMyGrabList" resultMap="selectMyGrabListByUidMap">
+    select pub.*,grab.id,grab.pid,grab.remark as remark1,grab.uid as uid1,grab.grabStatus from meetingpub pub
+    left join meetinggrab grab on pub.id=grab.pid
+    where grab.uid=#{uid}
+    order by pub.pcode desc;
+  </select>
+
+  <resultMap id="selectMyGrabListByUidMap" type="com.doudou.po.MeetingPub" extends="BaseResultMap">
+
+    <!--meetinggrab抢单表的映射-->
+    <association property="meetinggrab">
+      <id column="id" jdbcType="VARCHAR" property="id" />
+      <result column="pid" jdbcType="VARCHAR" property="pid" />
+      <result column="uid1" jdbcType="VARCHAR" property="uid" />
+      <result column="remark1" jdbcType="VARCHAR" property="remark" />
+      <result column="createDate" jdbcType="TIMESTAMP" property="createdate" />
+      <result column="grabStatus" jdbcType="SMALLINT" property="grabstatus" />
+      <result column="grabDate" jdbcType="TIMESTAMP" property="grabdate" />
+    </association>
+  </resultMap>
 </mapper>

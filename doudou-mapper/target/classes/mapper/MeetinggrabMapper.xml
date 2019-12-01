@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.doudou.mapper.MeetinggrabMapper">
+  <resultMap id="BaseResultMap" type="com.doudou.po.Meetinggrab">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="pid" jdbcType="VARCHAR" property="pid" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="uid" jdbcType="VARCHAR" property="uid" />
+    <result column="createDate" jdbcType="TIMESTAMP" property="createdate" />
+    <result column="grabStatus" jdbcType="INTEGER" property="grabstatus" />
+    <result column="grabDate" jdbcType="TIMESTAMP" property="grabdate" />
+    <result column="status" jdbcType="SMALLINT" property="status" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, pid, remark, uid, createDate, grabStatus, grabDate, status
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from meetinggrab
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from meetinggrab
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.doudou.po.Meetinggrab">
+    insert into meetinggrab (id, pid, remark, 
+      uid, createDate, grabStatus, 
+      grabDate, status)
+    values (#{id,jdbcType=VARCHAR}, #{pid,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{uid,jdbcType=VARCHAR}, #{createdate,jdbcType=TIMESTAMP}, #{grabstatus,jdbcType=INTEGER}, 
+      #{grabdate,jdbcType=TIMESTAMP}, #{status,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.doudou.po.Meetinggrab">
+    insert into meetinggrab
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="pid != null">
+        pid,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="createdate != null">
+        createDate,
+      </if>
+      <if test="grabstatus != null">
+        grabStatus,
+      </if>
+      <if test="grabdate != null">
+        grabDate,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="pid != null">
+        #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null">
+        #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="grabstatus != null">
+        #{grabstatus,jdbcType=INTEGER},
+      </if>
+      <if test="grabdate != null">
+        #{grabdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.doudou.po.Meetinggrab">
+    update meetinggrab
+    <set>
+      <if test="pid != null">
+        pid = #{pid,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=VARCHAR},
+      </if>
+      <if test="createdate != null">
+        createDate = #{createdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="grabstatus != null">
+        grabStatus = #{grabstatus,jdbcType=INTEGER},
+      </if>
+      <if test="grabdate != null">
+        grabDate = #{grabdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.doudou.po.Meetinggrab">
+    update meetinggrab
+    set pid = #{pid,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=VARCHAR},
+      createDate = #{createdate,jdbcType=TIMESTAMP},
+      grabStatus = #{grabstatus,jdbcType=INTEGER},
+      grabDate = #{grabdate,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

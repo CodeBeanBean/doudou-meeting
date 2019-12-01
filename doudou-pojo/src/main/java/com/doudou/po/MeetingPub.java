@@ -28,5 +28,8 @@ public class MeetingPub implements Serializable {
         /**发单状态 0无效1有效*/
     private Short status;
 
-
+    /**
+     * 关联一对一的抢单数据
+     */
+    private Meetinggrab meetinggrab;
 }

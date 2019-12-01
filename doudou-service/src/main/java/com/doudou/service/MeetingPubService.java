@@ -34,5 +34,14 @@ public interface MeetingPubService {
      * （显示都是发单数据的详情列表）
      */
     List<MeetingPub> selectGrabList(String uid,String tname);
+
+    /**
+     * 我的抢单列表
+     * 会议 --》会议抢单 --》 我的抢单
+     * @Param uid 是抢单人的UID
+     */
+    List<MeetingPub> selectMyGrabList(String uid);
+
+
 }
 

@@ -149,4 +149,40 @@
       status = #{status,jdbcType=SMALLINT}
     where id = #{id,jdbcType=VARCHAR}
   </update>
+
+    <!--我的抢单者列表-->
+    <select id="selectGrabList" resultType="com.doudou.po.MeetingPub">
+        select * from meetingpub pub
+        LEFT JOIN `user` u
+        ON ( pub.pzone='全国'  or  u.zone=pub.pzone )
+        where u.id=#{param1}
+        and pub.id not in( select pid from meetinggrab where grabStatus=1 or uid=#{param1})
+        <if test="param2!='-1'.toString()">
+            and pub.tname=#{param2}
+        </if>
+        order by pub.pcode desc
+    </select>
+
+
+  <!--我的抢单列表信息 根据用户id-->
+  <select id="selectMyGrabList" resultMap="selectMyGrabListByUidMap">
+    select pub.*,grab.id,grab.pid,grab.remark as remark1,grab.uid as uid1,grab.grabStatus from meetingpub pub
+    left join meetinggrab grab on pub.id=grab.pid
+    where grab.uid=#{uid}
+    order by pub.pcode desc;
+  </select>
+
+  <resultMap id="selectMyGrabListByUidMap" type="com.doudou.po.MeetingPub" extends="BaseResultMap">
+
+    <!--meetinggrab抢单表的映射-->
+    <association property="meetinggrab">
+      <id column="id" jdbcType="VARCHAR" property="id" />
+      <result column="pid" jdbcType="VARCHAR" property="pid" />
+      <result column="uid1" jdbcType="VARCHAR" property="uid" />
+      <result column="remark1" jdbcType="VARCHAR" property="remark" />
+      <result column="createDate" jdbcType="TIMESTAMP" property="createdate" />
+      <result column="grabStatus" jdbcType="SMALLINT" property="grabstatus" />
+      <result column="grabDate" jdbcType="TIMESTAMP" property="grabdate" />
+    </association>
+  </resultMap>
 </mapper>

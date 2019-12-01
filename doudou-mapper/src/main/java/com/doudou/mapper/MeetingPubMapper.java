@@ -43,4 +43,11 @@ public interface MeetingPubMapper {
      *  tname = java / ui / 数据库
      */
     List<MeetingPub> selectGrabList(String uid,String tname);
+
+    /**
+     * 我的抢单列表g
+     * 会议 --》会议抢单 --》 我的抢单
+     * @Param uid 是抢单人的UID
+     */
+    List<MeetingPub> selectMyGrabList(String uid);
 }
